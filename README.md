@@ -4,7 +4,12 @@ You can use the [editor on GitHub](https://github.com/galaxy-zhou/galaxyors.gith
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
+### Java
+
+- [集合](Java/Collection.md)
+- [集合](Java/Collection)
+
+![](images/study.jpg)
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
