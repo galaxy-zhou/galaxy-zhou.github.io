@@ -7,9 +7,10 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 ### Java
 
 - [集合](Java/Collection.md)
-- [集合](Java/Collection)
 
-![](images/study.jpg)
+### Java特性
+
+- [Java特性](Java/Feature.md)
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
