@@ -284,3 +284,8 @@ Integer value3 = a.orElse(new Integer(0));
 //Optional.get - 获取值，值需要存在
 Integer value4 = b.get();
 ```
+
+
+### 参考资料
+- https://www.oracle.com/technetwork/java/javase/8-whats-new-2157071.html
+- https://www.cnblogs.com/onetwo/p/8526374.html
