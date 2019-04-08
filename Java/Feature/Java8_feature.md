@@ -154,6 +154,7 @@ public class TestClazz implements Test1Interface,Test2Interface {
 一个接口有默认方法，考虑这样的情况，一个类实现了多个接口，且这些接口有相同的默认方法，需要实现类重写该默认方法。或者指定父类接口的方法。
 
 #### Stream API
+
 Java 8 API添加了一个新的抽象称为流Stream，可以让你以一种声明的方式处理数据。这种风格将要处理的元素集合看作一种流， 流在管道中传输， 并且可以在管道的节点上进行处理， 比如筛选， 排序，聚合等。
 元素流在管道中经过中间操作（intermediate operation）的处理，最后由最终操作(terminal operation)得到前面处理的结果。
 
@@ -172,12 +173,114 @@ Stream（流）是一个来自数据源的元素队列并支持聚合操作
 stream()   //为集合创建串行流。
 parallelStream()  //为集合创建串行流。
 
+// forEach 迭代
+// map 映射
+// filter 过滤
+// limit指定数量
+// sorted 排序
 
+List<String> strings = Arrays.asList("abc", "", "bc", "efg", "abcd","", "jkl");
+List<Integer> numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);
+List<Integer> integers = Arrays.asList(1,2,13,4,15,6,17,8,19);
+Random random = new Random();
 
+long count = strings.stream().filter(string->string.isEmpty()).count();
+System.out.println("空字符串数量为: " + count);
+
+count = strings.stream().filter(string -> string.length() == 3).count();
+System.out.println("字符串长度为 3 的数量为: " + count);
+
+List<String> filtered = strings.stream().filter(string ->!string.isEmpty()).collect(Collectors.toList());
+System.out.println("筛选后的列表: " + filtered);
+
+String mergedString = strings.stream().filter(string ->!string.isEmpty()).collect(Collectors.joining(", "));
+System.out.println("合并字符串: " + mergedString);
+
+List<Integer> squaresList = numbers.stream().map( i ->i*i).distinct().collect(Collectors.toList());
+System.out.println("Squares List: " + squaresList);
+System.out.println("列表: " +integers);
+
+IntSummaryStatistics stats = integers.stream().mapToInt((x) ->x).summaryStatistics();
+
+System.out.println("列表中最大的数 : " + stats.getMax());
+System.out.println("列表中最小的数 : " + stats.getMin());
+System.out.println("所有数之和 : " + stats.getSum());
+System.out.println("平均数 : " + stats.getAverage());
+System.out.println("随机数: ");
+
+random.ints().limit(10).sorted().forEach(System.out::println);
+
+// 并行处理
+count = strings.parallelStream().filter(string -> string.isEmpty()).count();
 ```
 
-#### Date Time API
+- 串行流和并行流的区别
+- Stream执行过程和
+- Stream原理和源码分析
 
+
+#### Date Time API
+Java 8通过发布新的Date-Time API (JSR 310)来进一步加强对日期与时间的处理。
+
+```Java
+LocalDateTime currentTime = LocalDateTime.now();
+System.out.println("当前时间: " + currentTime);
+
+LocalDate date1 = currentTime.toLocalDate();
+System.out.println("date1: " + date1);
+
+Month month = currentTime.getMonth();
+int day = currentTime.getDayOfMonth();
+int seconds = currentTime.getSecond();
+
+System.out.println("月: " + month +", 日: " + day +", 秒: " + seconds);
+
+LocalDateTime date2 = currentTime.withDayOfMonth(10).withYear(2012);
+System.out.println("date2: " + date2);
+
+// 12 december 2014
+LocalDate date3 = LocalDate.of(2014, Month.DECEMBER, 12);
+System.out.println("date3: " + date3);
+
+// 22 小时 15 分钟
+LocalTime date4 = LocalTime.of(22, 15);
+System.out.println("date4: " + date4);
+
+// 解析字符串
+LocalTime date5 = LocalTime.parse("20:15:30");
+System.out.println("date5: " + date5);
+
+ZonedDateTime date1 = ZonedDateTime.parse("2015-12-03T10:15:30+05:30[Asia/Shanghai]");
+System.out.println("date1: " + date1);
+
+ZoneId id = ZoneId.of("Europe/Paris");
+System.out.println("ZoneId: " + id);
+
+ZoneId currentZone = ZoneId.systemDefault();
+System.out.println("当期时区: " + currentZone);
+```
 
 
 #### Optional类
+
+Optional 类是一个可以为null的容器对象。如果值存在则isPresent()方法会返回true，调用get()方法会返回该对象。Optional 是个容器：它可以保存类型T的值，或者仅仅保存null。Optional提供很多有用的方法，这样我们就不用显式进行空值检测。
+Optional 类的引入很好的解决空指针异常
+
+```Java
+Integer value1 = null;
+Integer value2 = new Integer(10);
+
+// Optional.ofNullable - 允许传递为 null 参数
+Optional<Integer> a = Optional.ofNullable(value1);
+
+// Optional.of - 如果传递的参数是 null，抛出异常 NullPointerException
+Optional<Integer> b = Optional.of(value2);
+System.out.println("第一个参数值存在: " + a.isPresent());
+System.out.println("第二个参数值存在: " + b.isPresent());
+
+// Optional.orElse - 如果值存在，返回它，否则返回默认值
+Integer value3 = a.orElse(new Integer(0));
+
+//Optional.get - 获取值，值需要存在
+Integer value4 = b.get();
+```
