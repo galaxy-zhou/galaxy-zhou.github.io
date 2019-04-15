@@ -154,8 +154,6 @@ boolean batchRemove(Collection<?> c, boolean complement,
       return equal;
   }
 
-
-
  /**
   *   hashCode  // hashCode = 31 * hashCode + (e == null ? 0 : e.hashCode());
   */
@@ -179,6 +177,141 @@ boolean batchRemove(Collection<?> c, boolean complement,
       return hashCode;
   }
 ```
+#### LinkedList源码分析
+LinkedList底层实现是双向链表,顺序访问会非常高效，而随机访问效率比较低。
+
+```Java
+//LinkedList的继承关系
+java.lang.Object
+    java.util.AbstractCollection<E>
+        java.util.AbstractList<E>
+            java.util.AbstractSequentialList<E>
+                java.util.LinkedList<E>
+
+//实现接口:
+List<E>, Deque<E>, Cloneable, Serializable
 
 
-#### SortedList源码分析
+//链表节点
+private static class Node<E> {
+    E item;
+    Node<E> next;
+    Node<E> prev;
+
+    Node(Node<E> prev, E element, Node<E> next) {
+        this.item = element;
+        this.next = next;
+        this.prev = prev;
+    }
+}
+
+//构造器
+public LinkedList() {}
+
+public LinkedList(Collection<? extends E> c) {
+    this();
+    addAll(c);
+}
+
+//全局变量
+protected transient int modCount = 0;//修改次数
+transient int size = 0;//元素个数
+transient Node<E> first;//链表第一个元素
+transient Node<E> last;//链表最后一个元素
+
+
+//主要方法
+addFirst|add、addLast、addAll
+
+//从头部添加节点
+public void addFirst(E e);
+public boolean offerFirst(E e);
+public void push(E e);
+
+//从尾部添加节点
+public boolean add(E e);
+public boolean offer(E e);
+public boolean offerLast(E e);
+public void addLast(E e);
+public boolean addAll(Collection<? extends E> c);
+public boolean addAll(int index, Collection<? extends E> c);
+
+//随机访问操作元素
+public E get(int index);
+public E set(int index, E element);
+public void add(int index, E element);
+public E remove(int index);
+
+//定位元素
+public boolean remove(Object o);
+public int indexOf(Object o);
+public int lastIndexOf(Object o);
+
+//查询第一个节点值
+public E peek();
+public E element();
+public E getFirst();
+public E peekFirst();
+
+//获取最后一个节点值
+public E getLast();
+public E peekLast();
+
+//删除第一个节点
+public E removeFirst();
+public E pollFirst();
+public E pop();
+public E poll()
+public E remove();
+
+//删除最后一个节点
+public E removeLast();
+public E pollLast();
+
+private void linkFirst(E e) {
+    final Node<E> f = first;
+    final Node<E> newNode = new Node<>(null, e, f);
+    first = newNode;
+    if (f == null)
+        last = newNode;
+    else
+        f.prev = newNode;
+    size++;
+    modCount++;
+}
+
+public E getFirst() {
+    final Node<E> f = first;
+    if (f == null)
+        throw new NoSuchElementException();
+    return f.item;
+}
+
+public E getLast() {
+    final Node<E> l = last;
+    if (l == null)
+        throw new NoSuchElementException();
+    return l.item;
+}
+
+public E removeFirst() {
+    final Node<E> f = first;
+    if (f == null)
+        throw new NoSuchElementException();
+    return unlinkFirst(f);
+}
+
+public E removeLast() {
+    final Node<E> l = last;
+    if (l == null)
+        throw new NoSuchElementException();
+    return unlinkLast(l);
+}
+```
+
+#### ArrayList与LinkedList的对比
+
+- ArrayList是实现了基于动态数组的数据结构，LinkedList基于链表的数据结构。
+- ArrayList个数个有限（Int的最大值），LinkedList长度无限制。
+- ArrayList遍历效率高，快速随机访问元素
+- LinkedList的新增、删除效率高
