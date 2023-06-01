@@ -1,0 +1,2 @@
+org.galaxy.station.spi.service.IService=\
+org.galaxy.station.spi.service.ServiceB

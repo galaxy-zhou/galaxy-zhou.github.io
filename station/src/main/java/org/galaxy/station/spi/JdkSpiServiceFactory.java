@@ -11,12 +11,12 @@ import java.util.ServiceLoader;
  * @author zhouhaitao
  * @date 2023/5/30 18:20
  */
-public class ServiceFactory {
+public class JdkSpiServiceFactory {
     public IService getService(boolean first){
         ServiceLoader<IService> serviceLoader = ServiceLoader.load(IService.class);
         IService service = null;
         if(first){
-            service = serviceLoader.findFirst().get();
+            service = serviceLoader.iterator().next();
         }else {
             Iterator<IService> iterator = serviceLoader.iterator();
             while(iterator.hasNext()){
@@ -27,7 +27,7 @@ public class ServiceFactory {
     }
 
     public static void main(String[] args) {
-        ServiceFactory factory = new ServiceFactory();
+        JdkSpiServiceFactory factory = new JdkSpiServiceFactory();
         IService service = factory.getService(false);
 
         System.out.println(service.hello("zht"));
